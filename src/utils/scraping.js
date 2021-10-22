@@ -26,7 +26,7 @@ async function scraping(data) {
         let results = {};
 
         // console.log("Opening new tab...");
-        
+
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(0);
         console.log('Fill form...');
@@ -40,8 +40,8 @@ async function scraping(data) {
 
             await page.waitForSelector("select[name=zero_config_length]");
             await page.type("select[name=zero_config_length]", "100");
-            await page.waitForTimeout(2000);
-
+            await page.waitForTimeout(5000);
+            console.log("filas seleccionadas...");
 
             const getBodyRows = await page.evaluate(() => {
 
@@ -76,7 +76,7 @@ async function scraping(data) {
                 }
                 return bodyRows;
             });
-
+            console.log('retornando resultados');
             results = {
                 name: data.name,
                 dpi: data.dpi,
@@ -84,7 +84,7 @@ async function scraping(data) {
             };
 
 
-            
+
         } catch (error) {
             try {
                 console.log('Analizando un error');
@@ -94,9 +94,12 @@ async function scraping(data) {
                     ).innerHTML;
                 });
 
-                if (igssResponse){
-                    console.log("respuesta igss: " + igssResponse);
-                    results = response(data, igssResponse);
+                if (igssResponse) {
+                    console.log('comparando respuestas del error...');
+                    if (igssResponse === igssMessages[0]) results = response(data, igssMessages[0]);
+                    if (igssResponse === igssMessages[1]) results = response(data, igssMessages[2]);
+                    if (igssResponse === igssMessages[3]) results = response(data, igssMessages[3]);
+
                 } else {
                     console.log("respuesta igss: " + igssResponse);
                     results = response(data, 'Ocurrio un error inesperado');
@@ -110,7 +113,7 @@ async function scraping(data) {
                 return results = response(data, igssResponse[4]);
             }
         }
-        
+
         console.log('Cerrando navegador 1');
         await browser.close();
         return results;
@@ -155,7 +158,7 @@ const fillFormAndSubmit = async (page, data) => {
     });
 
 
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(4000);
     // console.log("Filling form...");
     await page.type("input[name=txtNumAfiliado]", data.dpi);
     await page.type("select[name=nacimiento-dia]", data.day);
