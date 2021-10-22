@@ -35,7 +35,7 @@ async function scraping(data) {
         try {
             console.log('extrayendo informacion...');
             await page.waitForSelector("#divPatronos", {
-                timeout: 180000
+                timeout: 18000
             });
 
             await page.waitForSelector("select[name=zero_config_length]");
@@ -99,7 +99,7 @@ async function scraping(data) {
                     results = response(data, igssResponse);
                 } else {
                     console.log("respuesta igss: " + igssResponse);
-                    results = response(data, igssMessages[2]);
+                    results = response(data, 'Ocurrio un error inesperado');
                 }
 
             } catch (err) {
