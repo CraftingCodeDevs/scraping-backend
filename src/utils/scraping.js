@@ -19,7 +19,7 @@ async function scraping(data) {
             defaultViewport: null,
             args: ['--no-sandbox'],
             ignoreHTTPSErrors: true,
-            slowMo: 900,
+            slowMo: 0,
             timeout: 0,
         });
 
@@ -30,12 +30,12 @@ async function scraping(data) {
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(0);
         console.log('Fill form...');
-        fillFormAndSubmit(page, data);
+        await fillFormAndSubmit(page, data);
 
         try {
             console.log('extrayendo informacion...');
             await page.waitForSelector("#divPatronos", {
-                timeout: 20000
+                timeout: 180000
             });
 
             await page.waitForSelector("select[name=zero_config_length]");
@@ -92,8 +92,6 @@ async function scraping(data) {
                     return document.querySelector(
                         ".container center h5:nth-of-type(1)"
                     ).innerHTML;
-                }, { 
-                    timeout: 5000,
                 });
 
                 if (igssResponse){
@@ -101,7 +99,7 @@ async function scraping(data) {
                     results = response(data, igssResponse);
                 } else {
                     console.log("respuesta igss: " + igssResponse);
-                    results = response(data, igssMessages[3]);
+                    results = response(data, igssMessages[2]);
                 }
 
             } catch (err) {
