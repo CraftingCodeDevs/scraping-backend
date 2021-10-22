@@ -19,7 +19,7 @@ async function scraping(data) {
             defaultViewport: null,
             args: ['--no-sandbox'],
             ignoreHTTPSErrors: true,
-            slowMo: 100,
+            slowMo: 900,
             timeout: 0,
         });
 
@@ -88,16 +88,20 @@ async function scraping(data) {
         } catch (error) {
             try {
                 console.log('Analizando un error');
-                await page.waitForTimeout(2000);
                 const igssResponse = await page.evaluate(() => {
                     return document.querySelector(
                         ".container center h5:nth-of-type(1)"
-                    ).innerText;
+                    ).innerHTML;
+                }, { 
+                    timeout: 5000,
                 });
 
                 if (igssResponse){
                     console.log("respuesta igss: " + igssResponse);
                     results = response(data, igssResponse);
+                } else {
+                    console.log("respuesta igss: " + igssResponse);
+                    results = response(data, igssMessages[3]);
                 }
 
             } catch (err) {
