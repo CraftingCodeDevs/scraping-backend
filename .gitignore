@@ -1,0 +1,8 @@
+node_modules
+.vscode
+*.csv
+prepros.config
+*.png
+.env
+interfaces
+.html
